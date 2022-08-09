@@ -1,13 +1,14 @@
+import { BigNumber } from "ethers";
 export interface Transaction {
     hash: string;
     type: number | null;
     blockNumber: number | null;
     confirmations: number | null;
     from: string;
-    gasPrice: object;
-    maxPriorityFeePerGas: object;
-    maxFeePerGas: object;
-    gasLimit: object;
+    gasPrice: BigNumber;
+    maxPriorityFeePerGas: BigNumber;
+    maxFeePerGas: BigNumber;
+    gasLimit: BigNumber;
     to: string;
     nonce: number | null;
     data: string;
