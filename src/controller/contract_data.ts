@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { provider } from '../config/rpc_connection';
+import { provider } from '../utils/rpc_connection';
 
 const ABI = [
     "function name() view returns (string)",
