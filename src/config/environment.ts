@@ -24,4 +24,3 @@ const configEnv = (): Environment => {
 }
 
 export const config = configEnv();
-
