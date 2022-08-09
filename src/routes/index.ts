@@ -6,16 +6,17 @@ import {
   getAllTransactions,
   getAbiDetail,
 } from "../controller/controllers";
+import { isValidHash } from "../middleware/isValidHash";
 
 const router = Router();
 
-router.get("/detail/:hash", getTransactionDetails);
+router.get("/detail/:txHash", isValidHash,getTransactionDetails);
 router
   .post("/transaction", saveTransaction)
-  .get("/:hash", getDecodeTransaction);
+  .get("/:txHash", getDecodeTransaction);
 
 router.get("/transaction/get-all", getAllTransactions);
 
-router.get("/contract/abi", getAbiDetail);
+router.get("/contract", getAbiDetail);
 
 export default router;
