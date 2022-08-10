@@ -1,6 +1,7 @@
 {
   "name": "cryptologic_challenge",
   "version": "0.0.1",
+  "type": "commonjs",
   "description": "Cryptologic Web3 Challenge",
   "main": "index.js",
   "repository": "https://github.com/nsalto/cryptologic_challenge.git",

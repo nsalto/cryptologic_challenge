@@ -1,12 +1,12 @@
-import { Request, Response } from "express";
-import { provider } from "../config/rpc_connection";
+import { NextFunction, Request, Response } from "express";
+import { provider } from "../utils/rpc_connection";
 import { getContractData } from "./contract_data";
 import { collections } from "../config/database";
 import { decodeGas } from "../utils/gasDecode";
-import { Error } from "../utils/Error";
+import { QueryError } from "../utils/Error";
 
-export const getTransactionDetails = async (req: Request, res: Response) => {
-  const txHash: string = req.params.hash;
+export const getTransactionDetails = async (req: Request, res: Response, next: NextFunction) => {
+  const txHash: string = req.params.txHash;
   try {
     const transaction = await provider.getTransaction(txHash);
     const { data } = transaction;
@@ -24,7 +24,7 @@ export const getTransactionDetails = async (req: Request, res: Response) => {
 };
 
 export const saveTransaction = async (req: Request, res: Response) => {
-  const txHash: string = req.body.hash;
+  const txHash: string = req.body.txHash;
   try {
     const transaction = await provider.getTransaction(txHash);
     const result = await collections.transaction_data?.insertOne(transaction);
@@ -40,11 +40,11 @@ export const saveTransaction = async (req: Request, res: Response) => {
   }
 };
 
-export const getDecodeTransaction = async (req: Request, res: Response) => {
-  const hash = req.params.hash;
+export const getDecodeTransaction = async (req: Request, res: Response, next: NextFunction) => {
+  const hash = req.params.txHash;
   try {
     const result = await collections.transaction_data?.findOne({ hash });
-    if (!result) Error.badRequest(`Could not find transaction`);
+    if (!result) throw new QueryError(400, "invalid txHash", `${hash} Could not found`);
 
     const decodeTransaction = decodeGas(result);
 
@@ -58,12 +58,12 @@ export const getDecodeTransaction = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllTransactions = async (req: Request, res: Response) => {
+export const getAllTransactions = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await collections.transaction_data?.find().toArray();
-    if (!result) return Error.badRequest(`Could not find transactions`);
+    if (!result) throw new QueryError(400, "bad Request", 'Could not found transactions');
 
-    const decodeArrayOfTrans = result.map((o) => decodeGas(o));
+    const decodeArrayOfTrans = result!.map((o) => decodeGas(o));
 
     return res.status(200).send({
       status: 200,
@@ -75,10 +75,12 @@ export const getAllTransactions = async (req: Request, res: Response) => {
   }
 };
 
-export const getAbiDetail = async (req: Request, res: Response) => {
+export const getAbiDetail = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const abi = await collections.abi?.find().toArray();
-        if (!abi) return Error.badRequest(`Could not find abi json`);
+        if (!abi) {
+          throw new QueryError(400, "invalidDateFormat", "Date format invalid. It should be YYYY-MM-DD");
+        }
     
         return res.status(200).send({
           status: 200,
