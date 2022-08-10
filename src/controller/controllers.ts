@@ -4,7 +4,6 @@ import { getContractData } from "./contract_data";
 import { collections } from "../config/database";
 import { decodeGas } from "../utils/gasDecode";
 import { QueryError } from "../utils/Error";
-import fs from 'fs'
 import path from 'path';
 
 export const getTransactionDetails = async (req: Request, res: Response, next: NextFunction) => {

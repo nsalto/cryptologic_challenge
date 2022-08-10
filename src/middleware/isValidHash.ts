@@ -7,7 +7,6 @@ export const isValidHash = (
   next: NextFunction
 ) => {
   const txHash = req.params.txHash;
-  console.log(!utils.isHexString(txHash, 32));
   if (!utils.isHexString(txHash, 32)) {
     res.status(404).json({
       detail: "Invalid Hash!",

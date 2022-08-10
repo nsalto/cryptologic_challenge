@@ -1,11 +1,7 @@
-FROM node:16-alpine AS dependencies
-WORKDIR /usr/src/app
-COPY package*.json ./
+FROM node:16
+WORKDIR /app
+COPY package.json /app
 RUN yarn install
-
-FROM dependencies
-COPY tsconfig.json .
-COPY ./server ./server    
-RUN yarn run start
+COPY . /app
+CMD yarn start
 EXPOSE 5001
-CMD [ "yarn", "start" ]
