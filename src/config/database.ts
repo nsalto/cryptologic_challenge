@@ -3,7 +3,6 @@ import * as mongoDB from "mongodb";
 
 export const collections: {
   transaction_data?: mongoDB.Collection;
-  abi?: mongoDB.Collection;
 } = {};
 
 export const connectDB = async () => {
@@ -18,10 +17,7 @@ export const connectDB = async () => {
       'transaction_data'
     );
 
-    const abi_collection: mongoDB.Collection = db.collection('ABI')
-
     collections.transaction_data = transaction_collection;
-    collections.abi = abi_collection;
 
     console.log(
       `Successfully connected to database: ${db.databaseName}`
