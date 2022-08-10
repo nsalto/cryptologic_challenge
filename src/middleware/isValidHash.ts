@@ -1,6 +1,5 @@
 import { utils } from "ethers";
 import { NextFunction, Request, Response } from "express";
-import { QueryError } from "../utils/Error";
 
 export const isValidHash = (
   req: Request,

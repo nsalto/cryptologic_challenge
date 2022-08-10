@@ -4,6 +4,8 @@ import { getContractData } from "./contract_data";
 import { collections } from "../config/database";
 import { decodeGas } from "../utils/gasDecode";
 import { QueryError } from "../utils/Error";
+import fs from 'fs'
+import path from 'path';
 
 export const getTransactionDetails = async (req: Request, res: Response, next: NextFunction) => {
   const txHash: string = req.params.txHash;
@@ -77,17 +79,18 @@ export const getAllTransactions = async (req: Request, res: Response, next: Next
 
 export const getAbiDetail = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const abi = await collections.abi?.find().toArray();
-        if (!abi) {
-          throw new QueryError(400, "invalidDateFormat", "Date format invalid. It should be YYYY-MM-DD");
-        }
-    
-        return res.status(200).send({
-          status: 200,
-          data: abi,
-        });
+        return res.status(200).sendFile(path.join(__dirname, '../public', 'abi.json'))
       } catch (error) {
         res.status(400).send(error);
         console.log(error);
       }
+}
+
+export const getByteCode = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+      return res.status(200).sendFile(path.join(__dirname, '../public', 'bytecode.json'))
+    } catch (error) {
+      res.status(400).send(error);
+      console.log(error);
+    }
 }
